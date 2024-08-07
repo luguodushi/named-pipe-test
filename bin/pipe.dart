@@ -19,7 +19,7 @@ import 'package:args/command_runner.dart';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
-const pipeName = r'\\.\pipe\ztna-edge-tunnel.sock'; //r'\\.\pipe\dart_pipe';
+const pipeName = r'\\.\pipe\OpenZiti\ziti-monitor\ipc'; //r'\\.\pipe\dart_pipe';
 const pipeMessage = '*** Hello Pipe World ***';
 
 /// A named pipe client
