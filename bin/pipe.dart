@@ -34,6 +34,8 @@ class ClientCommand extends Command<void> {
     final lpPipeName = pipeName.toNativeUtf16();
     final lpBuffer = wsalloc(128);
     final lpNumBytesRead = calloc<DWORD>();
+    final lpPipeMessage = pipeMessage.toNativeUtf16();
+    final lpNumBytesWritten = calloc<DWORD>();
     try {
       stdout.writeln('Connecting to pipe...');
       final pipe = CreateFile(
@@ -47,6 +49,16 @@ class ClientCommand extends Command<void> {
       if (pipe == INVALID_HANDLE_VALUE) {
         stderr.writeln('Failed to connect to pipe.');
         exit(1);
+      }
+
+      final result2 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length * 2,
+          lpNumBytesWritten, nullptr);
+
+      if (result2 == NULL) {
+        stderr.writeln('Failed to send data.');
+      } else {
+        final numBytesWritten = lpNumBytesWritten.value;
+        stdout.writeln('Number of bytes sent: $numBytesWritten');
       }
 
       stdout.writeln('Reading data from pipe...');
