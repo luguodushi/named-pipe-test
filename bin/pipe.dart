@@ -34,7 +34,7 @@ class ClientCommand extends Command<void> {
     final lpPipeName = pipeName.toNativeUtf16();
     final lpBuffer = wsalloc(128);
     final lpNumBytesRead = calloc<DWORD>();
-    final lpPipeMessage = pipeMessage.toNativeUtf16();
+    final lpPipeMessage = pipeMessage.toNativeUtf8();
     final lpNumBytesWritten = calloc<DWORD>();
     try {
       stdout.writeln('Connecting to pipe...');
@@ -51,7 +51,7 @@ class ClientCommand extends Command<void> {
         exit(1);
       }
 
-      final result2 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length,
+      final result2 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length * 2,
           lpNumBytesWritten, nullptr);
 
       if (result2 == NULL) {
