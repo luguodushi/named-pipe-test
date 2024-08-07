@@ -40,7 +40,7 @@ class ClientCommand extends Command<void> {
       stdout.writeln('Connecting to pipe...');
       final pipe = CreateFile(
           lpPipeName,
-          GENERIC_ACCESS_RIGHTS.GENERIC_READ,
+          GENERIC_ACCESS_RIGHTS.GENERIC_READ | GENERIC_ACCESS_RIGHTS.GENERIC_WRITE,
           FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
           nullptr,
           FILE_CREATION_DISPOSITION.OPEN_EXISTING,
