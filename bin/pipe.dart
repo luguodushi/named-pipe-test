@@ -51,7 +51,7 @@ class ClientCommand extends Command<void> {
         exit(1);
       }
 
-      final result2 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length * 2,
+      final result2 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length,
           lpNumBytesWritten, nullptr);
 
       if (result2 == NULL) {
