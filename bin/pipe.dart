@@ -61,19 +61,6 @@ class ClientCommand extends Command<void> {
         stdout.writeln('Number of bytes sent: $numBytesWritten');
       }
 
-      pipe = CreateFile(
-          lpPipeName,
-          GENERIC_ACCESS_RIGHTS.GENERIC_READ | GENERIC_ACCESS_RIGHTS.GENERIC_WRITE,
-          FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
-          nullptr,
-          FILE_CREATION_DISPOSITION.OPEN_EXISTING,
-          FILE_FLAGS_AND_ATTRIBUTES.FILE_ATTRIBUTE_NORMAL,
-          NULL);
-      if (pipe == INVALID_HANDLE_VALUE) {
-        stderr.writeln('Failed to connect to pipe.');
-        exit(1);
-      }
-
       stdout.writeln('Reading data from pipe...');
       final result =
           ReadFile(pipe, lpBuffer.cast(), 128, lpNumBytesRead, nullptr);
@@ -86,7 +73,7 @@ class ClientCommand extends Command<void> {
           ..writeln('Message: ${lpBuffer.toDartString()}');
       }
 
-      CloseHandle(pipe);
+      // CloseHandle(pipe);
       stdout.writeln('Done.');
     } finally {
       free(lpPipeName);
