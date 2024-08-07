@@ -38,7 +38,7 @@ class ClientCommand extends Command<void> {
     final lpNumBytesWritten = calloc<DWORD>();
     try {
       stdout.writeln('Connecting to pipe...');
-      final pipe = CreateFile(
+      var pipe = CreateFile(
           lpPipeName,
           GENERIC_ACCESS_RIGHTS.GENERIC_READ | GENERIC_ACCESS_RIGHTS.GENERIC_WRITE,
           FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
@@ -59,6 +59,19 @@ class ClientCommand extends Command<void> {
       } else {
         final numBytesWritten = lpNumBytesWritten.value;
         stdout.writeln('Number of bytes sent: $numBytesWritten');
+      }
+
+      pipe = CreateFile(
+          lpPipeName,
+          GENERIC_ACCESS_RIGHTS.GENERIC_READ | GENERIC_ACCESS_RIGHTS.GENERIC_WRITE,
+          FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
+          nullptr,
+          FILE_CREATION_DISPOSITION.OPEN_EXISTING,
+          FILE_FLAGS_AND_ATTRIBUTES.FILE_ATTRIBUTE_NORMAL,
+          NULL);
+      if (pipe == INVALID_HANDLE_VALUE) {
+        stderr.writeln('Failed to connect to pipe.');
+        exit(1);
       }
 
       stdout.writeln('Reading data from pipe...');
