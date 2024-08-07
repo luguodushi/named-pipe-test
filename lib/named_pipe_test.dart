@@ -36,3 +36,7 @@ Do you want to try again?
       print('Continue pressed');
   }
 }
+
+void testNamedPipe() {
+  
+}
