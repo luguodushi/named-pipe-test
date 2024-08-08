@@ -75,7 +75,11 @@ class ClientCommand extends Command<void> {
       //     ..writeln('Number of bytes read: $numBytesRead')
       //     ..writeln('Message: ${lpBuffer.toDartString()}');
       // }
-      await Isolate.run(() => readEvent(pipe));
+      final receivePort = ReceivePort();
+      receivePort.listen((message) {
+        stdout.writeln('xxxxxxxxxx: $message');
+      });
+      await Isolate.spawn(readEvent, (sendPort: receivePort.sendPort, pipe: pipe));
       
       CloseHandle(pipe);
       stdout.writeln('Done.');
@@ -87,14 +91,14 @@ class ClientCommand extends Command<void> {
   }
 }
 
-Future<void> readEvent(int pipe) {
+Future<void> readEvent(({ SendPort sendPort, int pipe }) record) {
   while(true) {
     final lpBuffer = wsalloc2(16384);
     final lpNumBytesRead = calloc<DWORD>();
     try {
       stdout.writeln('Reading data from pipe...');
       final result =
-          ReadFile(pipe, lpBuffer.cast(), 16384, lpNumBytesRead, nullptr);
+          ReadFile(record.pipe, lpBuffer.cast(), 16384, lpNumBytesRead, nullptr);
       if (result == NULL) {
         stderr.writeln('Failed to read data from the pipe.');
       } else {
@@ -102,6 +106,7 @@ Future<void> readEvent(int pipe) {
         stdout
           ..writeln('Number of bytes read: $numBytesRead')
           ..writeln('Message: ${lpBuffer.toDartString()}');
+        record.sendPort.send(lpBuffer.toDartString());
       }
     } finally {
       free(lpBuffer);
