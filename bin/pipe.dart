@@ -22,6 +22,8 @@ import 'package:win32/win32.dart';
 const pipeName = r'\\.\pipe\ziti-edge-tunnel-event.sock'; //r'\\.\pipe\dart_pipe';
 const pipeMessage = '{"Action":"Normal","Op":"Start"}\n';
 
+LPSTR wsalloc2(int wChars) => calloc<UCHAR>(wChars).cast();
+
 /// A named pipe client
 class ClientCommand extends Command<void> {
   @override
@@ -32,7 +34,7 @@ class ClientCommand extends Command<void> {
   @override
   void run() {
     final lpPipeName = pipeName.toNativeUtf16();
-    final lpBuffer = calloc<UCHAR>(128).cast(); //wsalloc(128);
+    final lpBuffer = wsalloc2(128);
     final lpNumBytesRead = calloc<DWORD>();
     final lpPipeMessage = pipeMessage.toNativeUtf8();
     final lpNumBytesWritten = calloc<DWORD>();
