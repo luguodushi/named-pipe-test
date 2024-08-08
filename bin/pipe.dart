@@ -32,7 +32,7 @@ class ClientCommand extends Command<void> {
   @override
   void run() {
     final lpPipeName = pipeName.toNativeUtf16();
-    final lpBuffer = wsalloc(128);
+    final lpBuffer = calloc<Utf8>(128);
     final lpNumBytesRead = calloc<DWORD>();
     final lpPipeMessage = pipeMessage.toNativeUtf8();
     final lpNumBytesWritten = calloc<DWORD>();
@@ -70,7 +70,7 @@ class ClientCommand extends Command<void> {
         final numBytesRead = lpNumBytesRead.value;
         stdout
           ..writeln('Number of bytes read: $numBytesRead')
-          ..writeln('Message: ${lpBuffer.toDartString().toNativeUtf8().toString()}');
+          ..writeln('Message: ${lpBuffer.toDartString()}');
       }
       
       CloseHandle(pipe);
