@@ -32,7 +32,7 @@ class ClientCommand extends Command<void> {
   @override
   void run() {
     final lpPipeName = pipeName.toNativeUtf16();
-    final lpBuffer = calloc<Utf8>(128);
+    final lpBuffer = calloc<LPSTR>(128);
     final lpNumBytesRead = calloc<DWORD>();
     final lpPipeMessage = pipeMessage.toNativeUtf8();
     final lpNumBytesWritten = calloc<DWORD>();
