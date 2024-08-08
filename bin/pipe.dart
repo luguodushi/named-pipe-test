@@ -20,7 +20,7 @@ import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
 const pipeName = r'\\.\pipe\OpenZiti\ziti-monitor\ipc'; //r'\\.\pipe\dart_pipe';
-const pipeMessage = '{"Action":"Normal","Op":"Start"}';
+const pipeMessage = '{"Action":"Normal","Op":"Start"}\n';
 
 /// A named pipe client
 class ClientCommand extends Command<void> {
