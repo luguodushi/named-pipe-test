@@ -61,6 +61,8 @@ class ClientCommand extends Command<void> {
         stdout.writeln('Number of bytes sent: $numBytesWritten');
       }
 
+      CloseHandle(pipe);
+
       stdout.writeln('Reading data from pipe...');
       final result =
           ReadFile(pipe, lpBuffer.cast(), 128, lpNumBytesRead, nullptr);
@@ -73,7 +75,7 @@ class ClientCommand extends Command<void> {
           ..writeln('Message: ${lpBuffer.toDartString()}');
       }
       
-      CloseHandle(pipe);
+      // CloseHandle(pipe);
       stdout.writeln('Done.');
     } finally {
       free(lpPipeName);
