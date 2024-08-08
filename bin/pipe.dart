@@ -70,7 +70,7 @@ class ClientCommand extends Command<void> {
         final numBytesRead = lpNumBytesRead.value;
         stdout
           ..writeln('Number of bytes read: $numBytesRead')
-          ..writeln('Message: ${lpBuffer.toDartString()}');
+          ..writeln('Message: ${lpBuffer.toDartString().toNativeUtf8().toString()}');
       }
       
       CloseHandle(pipe);
