@@ -41,10 +41,10 @@ class ClientCommand extends Command<void> {
       var pipe = CreateFile(
           lpPipeName,
           GENERIC_ACCESS_RIGHTS.GENERIC_READ | GENERIC_ACCESS_RIGHTS.GENERIC_WRITE,
-          0,
+          FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
           nullptr,
           FILE_CREATION_DISPOSITION.OPEN_EXISTING,
-          FILE_FLAGS_AND_ATTRIBUTES.FILE_FLAG_WRITE_THROUGH,
+          FILE_FLAGS_AND_ATTRIBUTES.FILE_ATTRIBUTE_NORMAL,
           NULL);
       if (pipe == INVALID_HANDLE_VALUE) {
         stderr.writeln('Failed to connect to pipe.');
