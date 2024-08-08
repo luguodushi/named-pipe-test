@@ -100,7 +100,7 @@ void readEvent(({ SendPort sendPort, int pipe }) record) {
     final lpBuffer = wsalloc2(16384);
     final lpNumBytesRead = calloc<DWORD>();
     try {
-      stdout.writeln('Reading data from pipe...');
+      stdout.writeln('Reading data from pipe...${record.pipe}');
       final result =
           ReadFile(record.pipe, lpBuffer.cast(), 16384, lpNumBytesRead, nullptr);
       if (result == NULL) {
