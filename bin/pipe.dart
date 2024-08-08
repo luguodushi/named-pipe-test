@@ -80,9 +80,9 @@ class ClientCommand extends Command<void> {
         stdout.writeln('xxxxxxxxxx: $message');
       });
       await Isolate.spawn(readEvent, (sendPort: receivePort.sendPort, pipe: pipe));
-      stdout.writeln('Done222.');
-      CloseHandle(pipe);
-      stdout.writeln('Done.');
+      // stdout.writeln('Done222.');
+      // CloseHandle(pipe);
+      // stdout.writeln('Done.');
     } finally {
       free(lpPipeName);
       free(lpBuffer);
