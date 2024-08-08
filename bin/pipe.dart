@@ -44,7 +44,7 @@ class ClientCommand extends Command<void> {
           FILE_SHARE_MODE.FILE_SHARE_READ | FILE_SHARE_MODE.FILE_SHARE_WRITE,
           nullptr,
           FILE_CREATION_DISPOSITION.OPEN_EXISTING,
-          FILE_FLAGS_AND_ATTRIBUTES.FILE_ATTRIBUTE_NORMAL,
+          FILE_FLAGS_AND_ATTRIBUTES.FILE_ATTRIBUTE_NORMAL | FILE_FLAGS_AND_ATTRIBUTES.FILE_FLAG_WRITE_THROUGH,
           NULL);
       if (pipe == INVALID_HANDLE_VALUE) {
         stderr.writeln('Failed to connect to pipe.');
@@ -61,18 +61,18 @@ class ClientCommand extends Command<void> {
         stdout.writeln('Number of bytes sent: $numBytesWritten');
       }
 
-      // stdout.writeln('Reading data from pipe...');
-      // final result =
-      //     ReadFile(pipe, lpBuffer.cast(), 128, lpNumBytesRead, nullptr);
-      // if (result == NULL) {
-      //   stderr.writeln('Failed to read data from the pipe.');
-      // } else {
-      //   final numBytesRead = lpNumBytesRead.value;
-      //   stdout
-      //     ..writeln('Number of bytes read: $numBytesRead')
-      //     ..writeln('Message: ${lpBuffer.toDartString()}');
-      // }
-
+      stdout.writeln('Reading data from pipe...');
+      final result =
+          ReadFile(pipe, lpBuffer.cast(), 128, lpNumBytesRead, nullptr);
+      if (result == NULL) {
+        stderr.writeln('Failed to read data from the pipe.');
+      } else {
+        final numBytesRead = lpNumBytesRead.value;
+        stdout
+          ..writeln('Number of bytes read: $numBytesRead')
+          ..writeln('Message: ${lpBuffer.toDartString()}');
+      }
+      
       CloseHandle(pipe);
       stdout.writeln('Done.');
     } finally {
