@@ -91,8 +91,12 @@ class ClientCommand extends Command<void> {
   }
 }
 
-Future<void> readEvent(({ SendPort sendPort, int pipe }) record) {
+void readEvent(({ SendPort sendPort, int pipe }) record) {
+  var i = 1;
   while(true) {
+    if (i++ >= 10) {
+      return;
+    }
     final lpBuffer = wsalloc2(16384);
     final lpNumBytesRead = calloc<DWORD>();
     try {
@@ -108,6 +112,7 @@ Future<void> readEvent(({ SendPort sendPort, int pipe }) record) {
           ..writeln('Message: ${lpBuffer.toDartString()}');
         record.sendPort.send(lpBuffer.toDartString());
       }
+      
     } finally {
       free(lpBuffer);
       free(lpNumBytesRead);
