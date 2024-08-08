@@ -61,27 +61,17 @@ class ClientCommand extends Command<void> {
         stdout.writeln('Number of bytes sent: $numBytesWritten');
       }
 
-      final result3 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length,
-          lpNumBytesWritten, nullptr);
-
-      if (result3 == NULL) {
-        stderr.writeln('Failed to send data.');
-      } else {
-        final numBytesWritten = lpNumBytesWritten.value;
-        stdout.writeln('Number of bytes sent: $numBytesWritten');
-      }
-
-      stdout.writeln('Reading data from pipe...');
-      final result =
-          ReadFile(pipe, lpBuffer.cast(), 128, lpNumBytesRead, nullptr);
-      if (result == NULL) {
-        stderr.writeln('Failed to read data from the pipe.');
-      } else {
-        final numBytesRead = lpNumBytesRead.value;
-        stdout
-          ..writeln('Number of bytes read: $numBytesRead')
-          ..writeln('Message: ${lpBuffer.toDartString()}');
-      }
+      // stdout.writeln('Reading data from pipe...');
+      // final result =
+      //     ReadFile(pipe, lpBuffer.cast(), 128, lpNumBytesRead, nullptr);
+      // if (result == NULL) {
+      //   stderr.writeln('Failed to read data from the pipe.');
+      // } else {
+      //   final numBytesRead = lpNumBytesRead.value;
+      //   stdout
+      //     ..writeln('Number of bytes read: $numBytesRead')
+      //     ..writeln('Message: ${lpBuffer.toDartString()}');
+      // }
 
       CloseHandle(pipe);
       stdout.writeln('Done.');
