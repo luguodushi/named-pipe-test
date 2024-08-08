@@ -34,7 +34,7 @@ class ClientCommand extends Command<void> {
   @override
   void run() {
     final lpPipeName = pipeName.toNativeUtf16();
-    final lpBuffer = wsalloc2(128);
+    final lpBuffer = wsalloc2(256);
     final lpNumBytesRead = calloc<DWORD>();
     final lpPipeMessage = pipeMessage.toNativeUtf8();
     final lpNumBytesWritten = calloc<DWORD>();
@@ -65,7 +65,7 @@ class ClientCommand extends Command<void> {
 
       stdout.writeln('Reading data from pipe...');
       final result =
-          ReadFile(pipe, lpBuffer.cast(), 128, lpNumBytesRead, nullptr);
+          ReadFile(pipe, lpBuffer.cast(), 256, lpNumBytesRead, nullptr);
       if (result == NULL) {
         stderr.writeln('Failed to read data from the pipe.');
       } else {
