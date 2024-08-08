@@ -19,7 +19,7 @@ import 'package:args/command_runner.dart';
 import 'package:ffi/ffi.dart';
 import 'package:win32/win32.dart';
 
-const pipeName = r'\\.\pipe\OpenZiti\ziti-monitor\ipc'; //r'\\.\pipe\dart_pipe';
+const pipeName = r'\\.\pipe\ziti-edge-tunnel-event.sock'; //r'\\.\pipe\dart_pipe';
 const pipeMessage = '{"Action":"Normal","Op":"Start"}\n';
 
 /// A named pipe client
@@ -51,15 +51,15 @@ class ClientCommand extends Command<void> {
         exit(1);
       }
 
-      final result2 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length,
-          lpNumBytesWritten, nullptr);
+      // final result2 = WriteFile(pipe, lpPipeMessage.cast(), pipeMessage.length,
+      //     lpNumBytesWritten, nullptr);
 
-      if (result2 == NULL) {
-        stderr.writeln('Failed to send data.');
-      } else {
-        final numBytesWritten = lpNumBytesWritten.value;
-        stdout.writeln('Number of bytes sent: $numBytesWritten');
-      }
+      // if (result2 == NULL) {
+      //   stderr.writeln('Failed to send data.');
+      // } else {
+      //   final numBytesWritten = lpNumBytesWritten.value;
+      //   stdout.writeln('Number of bytes sent: $numBytesWritten');
+      // }
 
       stdout.writeln('Reading data from pipe...');
       final result =
