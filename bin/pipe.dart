@@ -14,6 +14,7 @@
 
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:args/command_runner.dart';
 import 'package:ffi/ffi.dart';
@@ -32,7 +33,7 @@ class ClientCommand extends Command<void> {
   String get description => 'Execute the named pipe client.';
 
   @override
-  void run() {
+  void run() async {
     final lpPipeName = pipeName.toNativeUtf16();
     final lpBuffer = wsalloc2(16384);
     final lpNumBytesRead = calloc<DWORD>();
@@ -63,6 +64,34 @@ class ClientCommand extends Command<void> {
       //   stdout.writeln('Number of bytes sent: $numBytesWritten');
       // }
 
+      // stdout.writeln('Reading data from pipe...');
+      // final result =
+      //     ReadFile(pipe, lpBuffer.cast(), 16384, lpNumBytesRead, nullptr);
+      // if (result == NULL) {
+      //   stderr.writeln('Failed to read data from the pipe.');
+      // } else {
+      //   final numBytesRead = lpNumBytesRead.value;
+      //   stdout
+      //     ..writeln('Number of bytes read: $numBytesRead')
+      //     ..writeln('Message: ${lpBuffer.toDartString()}');
+      // }
+      await Isolate.run(() => readEvent(pipe));
+      
+      CloseHandle(pipe);
+      stdout.writeln('Done.');
+    } finally {
+      free(lpPipeName);
+      free(lpBuffer);
+      free(lpNumBytesRead);
+    }
+  }
+}
+
+Future<void> readEvent(int pipe) {
+  while(true) {
+    final lpBuffer = wsalloc2(16384);
+    final lpNumBytesRead = calloc<DWORD>();
+    try {
       stdout.writeln('Reading data from pipe...');
       final result =
           ReadFile(pipe, lpBuffer.cast(), 16384, lpNumBytesRead, nullptr);
@@ -74,11 +103,7 @@ class ClientCommand extends Command<void> {
           ..writeln('Number of bytes read: $numBytesRead')
           ..writeln('Message: ${lpBuffer.toDartString()}');
       }
-      
-      CloseHandle(pipe);
-      stdout.writeln('Done.');
     } finally {
-      free(lpPipeName);
       free(lpBuffer);
       free(lpNumBytesRead);
     }
